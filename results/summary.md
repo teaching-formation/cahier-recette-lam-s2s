@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Sens de traduction** : `dioula` → `french`
-**Généré le** : 2026-04-20 à 11:56:37
+**Généré le** : 2026-04-20 à 12:05:14
 
 ---
 
