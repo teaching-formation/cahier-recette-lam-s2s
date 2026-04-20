@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Sens de traduction** : `dioula` → `french`
-**Généré le** : 2026-04-20 à 11:34:33
+**Généré le** : 2026-04-20 à 11:38:30
 
 ---
 
@@ -28,14 +28,16 @@
 
 ## person3
 
-_(aucun fichier)_
+| Fichier | Source (wav) | Traduction (texte) | Audio traduit (wav) | Statut |
+|---|---|---|---|---|
+| AUDIO-2026-04-20-11-30-29 | [🎙](https://raw.githubusercontent.com/teaching-formation/cahier-recette-lam-s2s/main/person3/AUDIO-2026-04-20-11-30-29.wav) | et le matin, le matin, je suis allé à la maison !  | [🔊](https://raw.githubusercontent.com/teaching-formation/cahier-recette-lam-s2s/main/results/person3/AUDIO-2026-04-20-11-30-29_translated.wav) | ✅ |
 
 ---
 
 ## Bilan de cette exécution
 
-- **Total d'appels API** : 0
-- **Succès** : 0
+- **Total d'appels API** : 1
+- **Succès** : 1
 - **Échecs** : 0
 
 ## Notes techniques
