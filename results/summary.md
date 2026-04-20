@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Sens de traduction** : `dioula` → `french`
-**Généré le** : 2026-04-20 à 11:38:30
+**Généré le** : 2026-04-20 à 11:56:37
 
 ---
 
@@ -36,8 +36,8 @@
 
 ## Bilan de cette exécution
 
-- **Total d'appels API** : 1
-- **Succès** : 1
+- **Total d'appels API** : 0
+- **Succès** : 0
 - **Échecs** : 0
 
 ## Notes techniques
