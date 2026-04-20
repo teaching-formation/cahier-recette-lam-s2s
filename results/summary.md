@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Sens de traduction** : `dioula` → `french` ET `bambara` → `french`
-**Généré le** : 2026-04-20 à 15:44:24
+**Généré le** : 2026-04-20 à 15:58:36
 
 ---
 
@@ -38,9 +38,9 @@
 
 | Fichier | Source | Traduction (texte) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-14-41-11 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-41-11.mp3) | _(échec ou non traité)_ | — |
-| AUDIO-2026-04-20-14-49-40 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-49-40.mp3) | _(échec ou non traité)_ | — |
-| AUDIO-2026-04-20-14-51-08 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-51-08.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-14-41-11_part003 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-41-11_part003.mp3) | Je vais vous le dire, ma famille, le foie de Dieu, la voix même de Dieu, je me fiche des tomates et des pommes, vous cherchez du sang, une livre que leur foie ne voit pas, il n'a pas de bouche, on peut l'acheter sans bouche, je peux l'acheter au kilo, je m'en fiche aujourd'hui !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person4/AUDIO-2026-04-20-14-41-11_part003_translated.mp3) |
+| AUDIO-2026-04-20-14-49-40_part003 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-49-40_part003.mp3) | Oui ! Le deuxième jour, aa ! Nous sommes dans le karité : nous sommes en difficulté, l'électricité est coupée le matin, elle est coupée le soir, sinon c&#39;est la destruction, nous vivons dans l'obscurité, les choses sont dans notre bouche, nous sommes dans la nourriture, tout est détruit.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person4/AUDIO-2026-04-20-14-49-40_part003_translated.mp3) |
+| AUDIO-2026-04-20-14-51-08_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-51-08_part002.mp3) | Les Bamananw disent que certaines personnes vendent de l'eau à la rivière. Ce mot a une signification profonde.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person4/AUDIO-2026-04-20-14-51-08_part002_translated.mp3) |
 
 ## person5
 
@@ -54,9 +54,9 @@
 
 | Fichier | Source | Traduction (texte) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-15-09-07 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-07.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-15-09-07_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-07_part002.mp3) | Je suis d'accord, habille-toi, habille-toi, aa, aujourd'hui est meilleur, je veux te demander de faire quelque chose, oui, Dieu lui-même a fait son œuvre, il a changé, nous voulons voir s'il peut,  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person6/AUDIO-2026-04-20-15-09-07_part002_translated.mp3) |
 | AUDIO-2026-04-20-15-09-36 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-36.mp3) | Isa, Isa, tu n'as pas vu la route aujourd'hui ? Je vais acheter du pain, je ne l'attends pas, je suis sur le bord de la route, tu m'as dit d'attendre.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person6/AUDIO-2026-04-20-15-09-36_translated.mp3) |
-| AUDIO-2026-04-20-15-10-18 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-10-18.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-15-10-18_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-10-18_part002.mp3) | Demain matin, j'irai à Pilato, Hafizu, on n'a rien fait, c&#39;est tout près, il y a des gens, des gens perçoivent des impôts ici, ici pour trouver des hommes, attendez demain et ici pour trouver des hommes, je prendrai soixante et j'irai.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula/person6/AUDIO-2026-04-20-15-10-18_part002_translated.mp3) |
 
 ---
 
@@ -91,9 +91,9 @@
 
 | Fichier | Source | Traduction (texte) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-14-41-11 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-41-11.mp3) | _(échec ou non traité)_ | — |
-| AUDIO-2026-04-20-14-49-40 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-49-40.mp3) | _(échec ou non traité)_ | — |
-| AUDIO-2026-04-20-14-51-08 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-51-08.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-14-41-11_part003 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-41-11_part003.mp3) | J&#39;aurai mon jour, c&#39;est la famille, la morsure de Dieu, la voix même de Dieu, je me fiche des tomates et pas des pommes, tu es dans le sang, le kilo leur morsure n'est pas goût, pas sucré si c&#39;est de la gelée, on peut l'acheter au goût, je peux l'acheter au kilo, je m'en fiche aujourd'hui !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person4/AUDIO-2026-04-20-14-41-11_part003_translated.mp3) |
+| AUDIO-2026-04-20-14-49-40_part003 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-49-40_part003.mp3) | Oui ! Le terefilanin, aa ! Nous avons notre carte : nous sommes tourmentés, l'électricité est coupée le matin, elle est coupée le soir, le temps est gâché, nous vivons dans l'obscurité, tout est gâché, notre nourriture est gâchée, tout est gâché.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person4/AUDIO-2026-04-20-14-49-40_part003_translated.mp3) |
+| AUDIO-2026-04-20-14-51-08_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person4/AUDIO-2026-04-20-14-51-08_part002.mp3) | Il existe un dicton en langue bambara selon lequel certains enfants vendent de l'eau sur la plage.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person4/AUDIO-2026-04-20-14-51-08_part002_translated.mp3) |
 
 ## person5
 
@@ -107,9 +107,9 @@
 
 | Fichier | Source | Traduction (texte) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-15-09-07 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-07.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-15-09-07_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-07_part002.mp3) | Je suis d'accord, ce sont les somas, c&#39;est ton corps, aa, aujourd'hui tu ferais mieux de le faire, je veux te faire essayer quelque chose, oui, Dieu lui-même l'a fait, il a aimé ça, nous voulons voir, s'il peut,  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person6/AUDIO-2026-04-20-15-09-07_part002_translated.mp3) |
 | AUDIO-2026-04-20-15-09-36 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-09-36.mp3) | Isa, Isa, tu n'as pas vu Ali aujourd'hui, mon village est derrière la maison pour acheter du pain, je n'ai pas attendu, il ne venait pas, je vais faire le tour de la route, te dis-tu entre deux virgules.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person6/AUDIO-2026-04-20-15-09-36_translated.mp3) |
-| AUDIO-2026-04-20-15-10-18 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-10-18.mp3) | _(échec ou non traité)_ | — |
+| AUDIO-2026-04-20-15-10-18_part002 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/person6/AUDIO-2026-04-20-15-10-18_part002.mp3) | Demain matin, je vais à Pilate, hafizu, nous n'avons rien fait de tel, c&#39;est proche, certains prennent des taxis ici qui, ici qui prennent des hommes, peut-être demain et ici faire cela arriver là-bas, j'en prendrai sept.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara/person6/AUDIO-2026-04-20-15-10-18_part002_translated.mp3) |
 
 ---
 
@@ -117,8 +117,8 @@
 ## Bilan de cette exécution
 
 - **Total d'appels API** : 10
-- **Succès** : 0
-- **Échecs** : 10
+- **Succès** : 10
+- **Échecs** : 0
 
 ## Notes techniques
 
@@ -126,4 +126,5 @@
 - **Format exigé par l'API** : WAV 16 kHz mono PCM 16-bit
 - **Format stocké côté client** : MP3 64 kbps mono (streamable directement dans le navigateur)
 - **Codes langue supportés** : `bambara`, `dioula`, `french`
+- **Durée max par audio** : 30 secondes (contrainte API — les audios plus longs sont automatiquement découpés en segments de 25s, suffixés `_part001`, `_part002`, etc.)
 - **Méthodologie** : chaque audio est envoyé deux fois à l'API, une fois comme `dioula`, une fois comme `bambara`. Les résultats permettent de comparer les deux interprétations.
