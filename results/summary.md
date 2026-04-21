@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Tests bidirectionnels** : dioula ↔ français · bambara ↔ français
-**Généré le** : 2026-04-21 à 11:48:25
+**Généré le** : 2026-04-21 à 14:49:56
 
 ---
 
@@ -71,11 +71,11 @@ _Sources lues dans `sources/local/`_
 
 | Fichier | Source | Traduction (french) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-17-43-23 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23 2.mp3) | Si c&#39;est le matin, où est le jàba ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23 2_translated.mp3) |
 | AUDIO-2026-04-20-17-43-23 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3) | ahá, á ni sùnggomàn són bò don ákenèn ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3) |
-| AUDIO-2026-04-20-17-43-24 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 2.mp3) | áni cé wò, ala longgo día, ala bì día !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24 2_translated.mp3) |
-| AUDIO-2026-04-20-17-43-24 3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 3.mp3) | Je vais au magasin et j'achète des tomates et des poivrons frais.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24 3_translated.mp3) |
+| AUDIO-2026-04-20-17-43-23_2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3) | Si c&#39;est le matin, où est le jàba ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3) |
 | AUDIO-2026-04-20-17-43-24 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3) | Je veux des oignons et des tomates.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24_2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3) | áni cé wò, ala longgo día, ala bì día !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24_3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3) | Je vais au magasin et j'achète des tomates et des poivrons frais.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3) |
 
 ---
 
@@ -143,11 +143,11 @@ _Sources lues dans `sources/local/`_
 
 | Fichier | Source | Traduction (french) | Audio traduit |
 |---|---|---|---|
-| AUDIO-2026-04-20-17-43-23 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23 2.mp3) | í et matin nê bá, jàba est cinq heures ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23 2_translated.mp3) |
 | AUDIO-2026-04-20-17-43-23 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3) | áhá, nous connaissons le son de l'épée ákɛ̀nɛ ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3) |
-| AUDIO-2026-04-20-17-43-24 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 2.mp3) | et toi, Dieu amour, Dieu aujourd'hui !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24 2_translated.mp3) |
-| AUDIO-2026-04-20-17-43-24 3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 3.mp3) | Je vais à la pisciculture, je vais acheter un gros poisson, des tomates et des carottes fraîches.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24 3_translated.mp3) |
+| AUDIO-2026-04-20-17-43-23_2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3) | í et matin nê bá, jàba est cinq heures ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3) |
 | AUDIO-2026-04-20-17-43-24 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3) | Le côté jabaculu est de la corde, j'aime le jabaculu et les tomates.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24_2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3) | et toi, Dieu amour, Dieu aujourd'hui !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24_3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3) | Je vais à la pisciculture, je vais acheter un gros poisson, des tomates et des carottes fraîches.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3) |
 
 ---
 
@@ -234,8 +234,8 @@ _(aucun fichier)_
 
 ## Bilan de cette exécution
 
-- **Total d'appels API** : 16
-- **Succès** : 16
+- **Total d'appels API** : 0
+- **Succès** : 0
 - **Échecs** : 0
 
 ## Notes techniques
