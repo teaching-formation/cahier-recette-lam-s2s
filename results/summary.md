@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Tests bidirectionnels** : dioula ↔ français · bambara ↔ français
-**Généré le** : 2026-04-20 à 16:53:53
+**Généré le** : 2026-04-21 à 11:48:25
 
 ---
 
@@ -67,6 +67,16 @@ _Sources lues dans `sources/local/`_
 | AUDIO-2026-04-20-15-10-18_part000 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3) | Demain matin, je vais à l'aéroport, hafizu, on n'a rien fait, c&#39;est tout près, je veux prendre un taxi ici, faites venir mes hommes, attendez demain et faites venir mes hommes, je prendrai le wuruwwu de et je partirai.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3) |
 | AUDIO-2026-04-20-15-10-18_part001 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3) | Je serai un peu absent, je me lèverai tôt, je prendrai six heures sur six et j'irai voir Pilate.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3) |
 
+## person7
+
+| Fichier | Source | Traduction (french) | Audio traduit |
+|---|---|---|---|
+| AUDIO-2026-04-20-17-43-23 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23 2.mp3) | Si c&#39;est le matin, où est le jàba ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23 2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-23 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3) | ahá, á ni sùnggomàn són bò don ákenèn ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 2.mp3) | áni cé wò, ala longgo día, ala bì día !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24 2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 3.mp3) | Je vais au magasin et j'achète des tomates et des poivrons frais.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24 3_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3) | Je veux des oignons et des tomates.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3) |
+
 ---
 
 # Passe : bambara → french
@@ -129,6 +139,16 @@ _Sources lues dans `sources/local/`_
 | AUDIO-2026-04-20-15-10-18_part000 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3) | Demain matin, je vais à Pilate, hafizu, on n'a rien fait, rapprochayons-nous, je veux prendre un taxi ici, voilà quelque chose, prends mes gars, peut-être demain et voilà, fais-le, prends-le mon gars, je vais prendre un taxi et partir.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3) |
 | AUDIO-2026-04-20-15-10-18_part001 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3) | Je serai lent, je me lèverai et j'irai six fois voir Pilate.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3) |
 
+## person7
+
+| Fichier | Source | Traduction (french) | Audio traduit |
+|---|---|---|---|
+| AUDIO-2026-04-20-17-43-23 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23 2.mp3) | í et matin nê bá, jàba est cinq heures ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23 2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-23 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3) | áhá, nous connaissons le son de l'épée ákɛ̀nɛ ?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 2 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 2.mp3) | et toi, Dieu amour, Dieu aujourd'hui !  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24 2_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 3 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24 3.mp3) | Je vais à la pisciculture, je vais acheter un gros poisson, des tomates et des carottes fraîches.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24 3_translated.mp3) |
+| AUDIO-2026-04-20-17-43-24 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3) | Le côté jabaculu est de la corde, j'aime le jabaculu et les tomates.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3) |
+
 ---
 
 # Passe : french → dioula
@@ -147,7 +167,11 @@ _Sources lues dans `sources/french/`_
 
 ## person2
 
-_(aucun fichier)_
+| Fichier | Source | Traduction (dioula) | Audio traduit |
+|---|---|---|---|
+| AUDIO-2026-04-21-10-28-48 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3) |  Bonjour, n tun ka kan ka dɔw filɛ faransɛkan na, n ɲinɛna, o kɔfɛ n y’a fɔn, o kɔfɛ ɲuman, n ɲinɛna o kɔ tugun. N’ bena dɔw filɛ kɔfɛ.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-28-48_translated.mp3) |
+| AUDIO-2026-04-21-10-33-48 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3) |  Yala kunnafoni dɔw b’i fɛ k’u jɛnsɛn ɛntɛrɛnɛti kan wa? I b’a fɛ ka kunnafoni minw fɔ jama ye?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-33-48_translated.mp3) |
+| AUDIO-2026-04-21-10-34-03 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3) |  Tuma bɛɛ, i ka baara kɛ ni sɛgɛsɛgɛrikɛlan ye n’i be navigatɛri kɛra. Aw ni ce aw ka bonya la kosɔbɛ.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-34-03_translated.mp3) |
 
 ## person3
 
@@ -183,7 +207,11 @@ _Sources lues dans `sources/french/`_
 
 ## person2
 
-_(aucun fichier)_
+| Fichier | Source | Traduction (bambara) | Audio traduit |
+|---|---|---|---|
+| AUDIO-2026-04-21-10-28-48 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3) |  Bonjour, n tun ka kan ka dɔw lajɛ faransikan na, n ɲinɛna, o kɔ n ye a to yen, o kɔfɛ bon, n ɲinɛna a kɔ tugun. N bɛna dɔw lajɛ kɔfɛ.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-28-48_translated.mp3) |
+| AUDIO-2026-04-21-10-33-48 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3) |  Yala kunnafoni dɔw b’aw bolo ka tila ɛntɛrinɛti kan wa? Kunnafoni minnu b’a fɛ ka fɔ jama ye wa?  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-33-48_translated.mp3) |
+| AUDIO-2026-04-21-10-34-03 | [🎙](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3) |  Baara kɛ ni tracking protection ye tuma bɛɛ n’i bɛ ka navigatɛri kɛ. Aw ni ce aw ka bonya la kosɛbɛ.  | [🔊](https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-34-03_translated.mp3) |
 
 ## person3
 
@@ -206,8 +234,8 @@ _(aucun fichier)_
 
 ## Bilan de cette exécution
 
-- **Total d'appels API** : 24
-- **Succès** : 24
+- **Total d'appels API** : 16
+- **Succès** : 16
 - **Échecs** : 0
 
 ## Notes techniques
