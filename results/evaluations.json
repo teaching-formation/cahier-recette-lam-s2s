@@ -1,0 +1,143 @@
+{
+  "dioula-to-french|person1|AUDIO-2026-04-20-10-16-09": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person1|AUDIO-2026-04-20-10-16-32": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person1|AUDIO-2026-04-20-10-16-58": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person1|AUDIO-2026-04-20-10-17-22": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person2|AUDIO-2026-04-20-11-11-35": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person2|AUDIO-2026-04-20-11-14-21": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person2|AUDIO-2026-04-20-11-14-35": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person2|AUDIO-2026-04-20-11-15-14": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person2|AUDIO-2026-04-20-11-15-31": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person3|AUDIO-2026-04-20-11-30-29": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part000": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part002": {
+    "tag": "exact"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part001": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part000": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part001": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part002": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part000": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part001": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person5|AUDIO-2026-04-20-15-02-56": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person5|AUDIO-2026-04-20-15-03-40": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person5|AUDIO-2026-04-20-15-07-50": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part000": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part001": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person6|AUDIO-2026-04-20-15-09-36": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part000": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part001": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person7|AUDIO-2026-04-20-17-43-23": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person7|AUDIO-2026-04-20-17-43-23_2": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person7|AUDIO-2026-04-20-17-43-24": {
+    "tag": "fautes"
+  },
+  "dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_2": {
+    "tag": "hallu"
+  },
+  "dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_3": {
+    "tag": "fautes"
+  },
+  "french-to-dioula|person1|AUDIO-2026-04-20-16-14-41": {
+    "tag": "exact"
+  },
+  "french-to-dioula|person1|AUDIO-2026-04-20-16-14-57": {
+    "tag": "fautes"
+  },
+  "french-to-dioula|person1|AUDIO-2026-04-20-16-15-07": {
+    "tag": "fautes"
+  },
+  "french-to-dioula|person1|AUDIO-2026-04-20-16-15-26": {
+    "tag": "fautes"
+  },
+  "french-to-dioula|person1|AUDIO-2026-04-20-16-15-39": {
+    "tag": "hallu"
+  },
+  "french-to-dioula|person2|AUDIO-2026-04-21-10-28-48": {
+    "tag": "fautes"
+  },
+  "french-to-dioula|person2|AUDIO-2026-04-21-10-33-48": {
+    "tag": "exact"
+  },
+  "french-to-dioula|person2|AUDIO-2026-04-21-10-34-03": {
+    "tag": "fautes"
+  },
+  "french-to-bambara|person1|AUDIO-2026-04-20-16-14-41": {
+    "tag": "exact"
+  },
+  "french-to-bambara|person1|AUDIO-2026-04-20-16-14-57": {
+    "tag": "hallu"
+  },
+  "french-to-bambara|person1|AUDIO-2026-04-20-16-15-07": {
+    "tag": "fautes"
+  },
+  "french-to-bambara|person1|AUDIO-2026-04-20-16-15-26": {
+    "tag": "fautes"
+  },
+  "french-to-bambara|person1|AUDIO-2026-04-20-16-15-39": {
+    "tag": "hallu"
+  },
+  "french-to-bambara|person2|AUDIO-2026-04-21-10-28-48": {
+    "tag": "fautes"
+  },
+  "french-to-bambara|person2|AUDIO-2026-04-21-10-33-48": {
+    "tag": "fautes"
+  },
+  "french-to-bambara|person2|AUDIO-2026-04-21-10-34-03": {
+    "tag": "hallu"
+  }
+}
