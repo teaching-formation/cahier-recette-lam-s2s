@@ -29,8 +29,8 @@
   h1 { margin: 0; font-size: 20px; color: var(--blue); }
   .subtitle { color: #666; font-size: 13px; margin-top: 4px; }
 
-  .progress {
-    display: flex; gap: 20px; align-items: center;
+  .toolbar {
+    display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
     margin-top: 12px; font-size: 13px;
   }
   .stat {
@@ -43,6 +43,16 @@
   .stat.fautes { background: #fff4e0; color: var(--yellow); }
   .stat.hallu { background: #fbe9e9; color: var(--red); }
 
+  .action-btn {
+    padding: 6px 14px; border-radius: 6px;
+    background: var(--blue); color: white;
+    border: none; cursor: pointer;
+    font-size: 13px; font-weight: 500;
+  }
+  .action-btn:hover { background: #003d87; }
+  .action-btn.secondary { background: #666; }
+  .action-btn.secondary:hover { background: #444; }
+
   main { padding: 24px; max-width: 1400px; margin: 0 auto; }
   h2 {
     color: var(--blue);
@@ -53,20 +63,15 @@
   }
 
   table {
-    width: 100%;
-    border-collapse: collapse;
+    width: 100%; border-collapse: collapse;
     background: white;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    font-size: 14px;
-    margin-bottom: 16px;
+    font-size: 14px; margin-bottom: 16px;
   }
   th {
-    background: var(--blue);
-    color: white;
-    padding: 10px 8px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
+    background: var(--blue); color: white;
+    padding: 10px 8px; text-align: left;
+    font-weight: 600; font-size: 12px;
     letter-spacing: 0.3px;
   }
   td {
@@ -75,7 +80,7 @@
     vertical-align: middle;
   }
   tr:nth-child(even) td { background: #fafafa; }
-  tr.evaluated td { background: #f0f8f4; }
+  tr.evaluated.exact td { background: #f0f8f4; }
   tr.evaluated.fautes td { background: #fef8eb; }
   tr.evaluated.hallu td { background: #fcf0f0; }
 
@@ -88,21 +93,19 @@
   .btn-group { display: flex; gap: 4px; }
   .btn {
     cursor: pointer;
-    border: 1.5px solid transparent;
+    border: 1.5px solid #ddd;
     background: white;
     padding: 6px 10px;
     border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    transition: all 0.1s;
+    font-size: 13px; font-weight: 600;
     color: #666;
-    border-color: #ddd;
+    transition: transform 0.1s;
   }
   .btn:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
   .btn.active.exact { background: var(--green); color: white; border-color: var(--green); }
   .btn.active.fautes { background: var(--yellow); color: white; border-color: var(--yellow); }
   .btn.active.hallu { background: var(--red); color: white; border-color: var(--red); }
-  .btn.active.clear { background: #888; color: white; border-color: #888; }
+  .btn.clear { color: #aaa; }
 
   .comment {
     width: 100%;
@@ -113,8 +116,7 @@
     font-family: inherit;
     margin-top: 4px;
     resize: vertical;
-    min-height: 28px;
-    max-height: 80px;
+    min-height: 28px; max-height: 80px;
   }
   .comment:focus { outline: none; border-color: var(--blue); }
 
@@ -123,14 +125,12 @@
     border-left: 3px solid var(--orange);
     padding: 12px 16px;
     margin-bottom: 24px;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 13px; line-height: 1.6;
     border-radius: 4px;
   }
   .help kbd {
     display: inline-block;
-    background: white;
-    border: 1px solid #ccc;
+    background: white; border: 1px solid #ccc;
     border-radius: 3px;
     padding: 1px 6px;
     font-family: ui-monospace, monospace;
@@ -138,51 +138,56 @@
     box-shadow: 0 1px 0 rgba(0,0,0,0.1);
   }
 
-  .export-bar {
+  .toast {
     position: fixed; bottom: 20px; right: 20px;
-    background: var(--blue);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,74,159,0.3);
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: 600;
+    background: var(--green); color: white;
+    padding: 14px 20px; border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-size: 13px; font-weight: 500;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+    max-width: 320px;
   }
-  .export-bar:hover { background: #003d87; }
+  .toast.show { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>📊 Cahier de recette — Évaluation des traductions LAM</h1>
-  <div class="subtitle">ANSUT / DTDI · Noter chaque traduction en écoutant les audios ci-dessous</div>
-  <div class="progress">
+  <div class="subtitle">ANSUT / DTDI · Noter chaque traduction en écoutant les audios</div>
+  <div class="toolbar">
     <span class="stat"><span id="total">0</span> au total</span>
     <span class="stat exact">✅ <span id="count-exact">0</span></span>
     <span class="stat fautes">🟡 <span id="count-fautes">0</span></span>
     <span class="stat hallu">❌ <span id="count-hallu">0</span></span>
-    <span class="stat">⏳ <span id="count-pending">0</span> à faire</span>
+    <span class="stat">⏳ <span id="count-pending">0</span></span>
+
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+    <button class="action-btn secondary" onclick="document.getElementById('import-file').click()">📂 Importer</button>
+    <button class="action-btn" onclick="exportEvaluations()">💾 Exporter JSON</button>
   </div>
 </header>
 
 <main>
 
 <div class="help">
-  <strong>Comment noter :</strong> écoute la source (🎙), écoute la traduction (🔊), puis clique sur le bon bouton.
-  <br><strong>Raccourcis clavier</strong> (sur la ligne où est le focus) : <kbd>1</kbd> = ✅ Sens exact · <kbd>2</kbd> = 🟡 Fautes visibles · <kbd>3</kbd> = ❌ Hallucination · <kbd>0</kbd> = effacer.
-  <br><strong>Sauvegarde</strong> : auto à chaque clic dans le navigateur (localStorage). Clique sur <strong>"💾 Exporter"</strong> en bas à droite pour générer le fichier <code>evaluations.json</code> qui sera lu par <code>./run.sh</code>.
+  <strong>Comment noter :</strong> écoute 🎙 (source), écoute 🔊 (traduction), clique sur le bon bouton.
+  <br><strong>Raccourcis clavier</strong> : <kbd>1</kbd>=✅ · <kbd>2</kbd>=🟡 · <kbd>3</kbd>=❌ · <kbd>0</kbd>=effacer (après avoir cliqué sur une ligne).
+  <br><strong>Sauvegarde</strong> : auto dans le navigateur. Pour persister côté projet : <strong>💾 Exporter</strong> → place <code>evaluations.json</code> dans <code>results/</code> → <code>./run.sh</code>.
+  <br><strong>Reprendre</strong> : au chargement, la page tente de récupérer automatiquement les évaluations sur GitHub. Sinon, clique <strong>📂 Importer</strong>.
 </div>
 
 <h2>dioula → french</h2>
 <h3 style="margin-top:16px;color:#555;font-size:15px">person1</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-09">
+<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-09" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-09</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-09.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-09.mp3"></audio></td>
   <td class="trad-col">í ni sùnggoma, á&amp;#39; be dí ? fondation en carrelage ?</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-09_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-09_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -193,11 +198,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-32">
+<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-32" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-32</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-32.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-32.mp3"></audio></td>
   <td class="trad-col">Tu as attrapé ses six poissons d'un seul coup.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-32_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-32_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -208,11 +213,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-58">
+<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-16-58" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-58</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-58.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-58.mp3"></audio></td>
   <td class="trad-col">J&amp;#39;en cherche quelques-uns, je ne trouve personne là-bas, et vous ?</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-58_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person1/AUDIO-2026-04-20-10-16-58_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -223,11 +228,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-17-22">
+<tr class="" data-id="dioula-to-french|person1|AUDIO-2026-04-20-10-17-22" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-17-22</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-17-22.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-17-22.mp3"></audio></td>
   <td class="trad-col">S&amp;#39;il ne te fait pas de mal, n'est-ce pas toi qui as des problèmes ?</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person1/AUDIO-2026-04-20-10-17-22_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person1/AUDIO-2026-04-20-10-17-22_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -242,11 +247,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person2</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-11-35">
+<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-11-35" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-11-35</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-11-35.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-11-35.mp3"></audio></td>
   <td class="trad-col">Ça fait longtemps, ce n'est pas impossible.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person2/AUDIO-2026-04-20-11-11-35_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person2/AUDIO-2026-04-20-11-11-35_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -257,11 +262,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-14-21">
+<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-14-21" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-14-21</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-14-21.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-14-21.mp3"></audio></td>
   <td class="trad-col">Aujourd'hui, le soleil s'est levé,</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person2/AUDIO-2026-04-20-11-14-21_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person2/AUDIO-2026-04-20-11-14-21_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -272,11 +277,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-14-35">
+<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-14-35" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-14-35</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-14-35.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-14-35.mp3"></audio></td>
   <td class="trad-col">Dieu nous a permis d'accepter le poison du maïs !</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person2/AUDIO-2026-04-20-11-14-35_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person2/AUDIO-2026-04-20-11-14-35_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -287,11 +292,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-15-14">
+<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-15-14" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-15-14</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-15-14.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-15-14.mp3"></audio></td>
   <td class="trad-col">L&amp;#39;homme est poussière, et nous sommes tous poussière.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person2/AUDIO-2026-04-20-11-15-14_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person2/AUDIO-2026-04-20-11-15-14_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -302,11 +307,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-15-31">
+<tr class="" data-id="dioula-to-french|person2|AUDIO-2026-04-20-11-15-31" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-15-31</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-15-31.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-15-31.mp3"></audio></td>
   <td class="trad-col">n'ála k&amp;#39;í sòn, ê ka gwaa so, n'ála mîn sòn kà nà ŋími sà.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person2/AUDIO-2026-04-20-11-15-31_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person2/AUDIO-2026-04-20-11-15-31_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -321,11 +326,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person3</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person3|AUDIO-2026-04-20-11-30-29">
+<tr class="" data-id="dioula-to-french|person3|AUDIO-2026-04-20-11-30-29" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-30-29</td>
-  <td><audio controls preload="none" src="sources/local/person3/AUDIO-2026-04-20-11-30-29.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person3/AUDIO-2026-04-20-11-30-29.mp3"></audio></td>
   <td class="trad-col">et le matin, le matin, je suis allé à la maison !</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person3/AUDIO-2026-04-20-11-30-29_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person3/AUDIO-2026-04-20-11-30-29_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -340,11 +345,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person4</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part000">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part000.mp3"></audio></td>
   <td class="trad-col">Je vous le dis, ma famille, le foie de Dieu, la voix même de Dieu, je me fiche des tomates et pas des pommes, vous êtes dans le sang, le poids de leur foie n'est pas visible, la bouche ne l'est pas s'ils le vendent, nous pouvons l'acheter sans bouche, je peux l'acheter au poids, je m'en fiche aujourd'hui !</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -355,11 +360,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part001">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part001.mp3"></audio></td>
   <td class="trad-col">Tu peux te débarrasser de quelques personnes, tu peux en perdre quelques-unes, tu perdras beaucoup de poids, même le monde du bois ne sait pas tout, même le monde du bois ne sait pas tout, même le bois ne sait pas tout, même le bois ne sait pas tout, même le bois ne sait pas tout, il ne danse pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas, il ne sait pas</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -370,11 +375,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part002">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-41-11_part002" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part002</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part002.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part002.mp3"></audio></td>
   <td class="trad-col">Merci pour cela.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part002_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-41-11_part002_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -385,11 +390,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part000">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part000.mp3"></audio></td>
   <td class="trad-col">Oui ! Le deuxième jour, aa ! Nous sommes dans le karité : nous sommes en difficulté, l'électricité est coupée le matin, elle est coupée le soir, sinon c&amp;#39;est la destruction, nous vivons dans l'obscurité, les choses sont dans notre bouche, nous sommes dans la nourriture, tout est détruit.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -400,11 +405,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part001">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part001.mp3"></audio></td>
   <td class="trad-col">Le père n'est pas encouragé, le problème qui l'encourage, c&amp;#39;est peut-être la destruction, la maison ne nous dit rien, ils ne nous disent rien, ils ne nous disent pas que, sans cela, l'électricité sera coupée, rouge, le petit est préparé, tout est vrai.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -415,11 +420,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part002">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-49-40_part002" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part002</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part002.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part002.mp3"></audio></td>
   <td class="trad-col">Les autorités ont eu pitié de nous et nous ont facilité la tâche. Nous sommes tous heureux, nous sommes tous heureux, Dieu nous aide.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part002_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-49-40_part002_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -430,11 +435,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part000">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-51-08_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-51-08_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-51-08_part000.mp3"></audio></td>
   <td class="trad-col">Les Bamananw disent que certains enfants vendent de l'eau à la rivière. Ce mot a une signification profonde.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-51-08_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-51-08_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -445,11 +450,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part001">
+<tr class="" data-id="dioula-to-french|person4|AUDIO-2026-04-20-14-51-08_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-51-08_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-51-08_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-51-08_part001.mp3"></audio></td>
   <td class="trad-col">Ils te combattront, mais ils ne pourront pas te vaincre, car tu es le fils de quelqu'un, tu as reçu de ton père une part de toi, qui est avec ta mère ; ta bouche, mon enfant, te quittera, il ne pourra pas te vaincre. Si ton homme est comme ça, va, tu es agriculteur.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person4/AUDIO-2026-04-20-14-51-08_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person4/AUDIO-2026-04-20-14-51-08_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -464,11 +469,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person5</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-02-56">
+<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-02-56" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-02-56</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-02-56.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-02-56.mp3"></audio></td>
   <td class="trad-col">Et le matin, les lentilles sont là, ta femme est là, ton père est là.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person5/AUDIO-2026-04-20-15-02-56_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person5/AUDIO-2026-04-20-15-02-56_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -479,11 +484,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-03-40">
+<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-03-40" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-03-40</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-03-40.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-03-40.mp3"></audio></td>
   <td class="trad-col">La grand-mère a dit : « Je lui demanderai, si le père est là, il dira : peu importe si ton père est là, s'il ne dort pas, la femme viendra et se mariera. »</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person5/AUDIO-2026-04-20-15-03-40_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person5/AUDIO-2026-04-20-15-03-40_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -494,11 +499,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-07-50">
+<tr class="" data-id="dioula-to-french|person5|AUDIO-2026-04-20-15-07-50" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-07-50</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-07-50.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-07-50.mp3"></audio></td>
   <td class="trad-col">ou awa, quand il est là, il vient de la grande maison, quand il arrive tu dis maaw, unhun, je veux venir lui dire, je veux acheter une robe, quand il arrive il dit à la personne qui a acheté la robe, il la met chez lui.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person5/AUDIO-2026-04-20-15-07-50_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person5/AUDIO-2026-04-20-15-07-50_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -513,11 +518,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person6</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part000">
+<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-07_part000</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-07_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-07_part000.mp3"></audio></td>
   <td class="trad-col">Si vous êtes d'accord, impliquez votre famille, impliquez-vous physiquement, aa, aujourd'hui est meilleur, je veux vous demander de faire quelque chose, ou même de faire quelque chose, il est âgé, nous voulons voir s'il peut,</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-07_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-07_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -528,11 +533,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part001">
+<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-07_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-07_part001</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-07_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-07_part001.mp3"></audio></td>
   <td class="trad-col">À la mariée, elle restera là et m'attendra.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-07_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-07_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -543,11 +548,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-36">
+<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-09-36" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-36</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-36.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-36.mp3"></audio></td>
   <td class="trad-col">Isa, Isa, tu n'as pas vu la route aujourd'hui ? Je vais acheter du pain, je ne l'attends pas, je suis sur le bord de la route, tu m'as dit d'attendre.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-36_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-09-36_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -558,11 +563,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part000">
+<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-10-18_part000</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3"></audio></td>
   <td class="trad-col">Demain matin, je vais à l'aéroport, hafizu, on n'a rien fait, c&amp;#39;est tout près, je veux prendre un taxi ici, faites venir mes hommes, attendez demain et faites venir mes hommes, je prendrai le wuruwwu de et je partirai.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -573,11 +578,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part001">
+<tr class="" data-id="dioula-to-french|person6|AUDIO-2026-04-20-15-10-18_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-10-18_part001</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3"></audio></td>
   <td class="trad-col">Je serai un peu absent, je me lèverai tôt, je prendrai six heures sur six et j'irai voir Pilate.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -592,11 +597,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person7</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-23">
+<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-23" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-23</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3"></audio></td>
   <td class="trad-col">ahá, á ni sùnggomàn són bò don ákenèn ?</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -607,11 +612,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-23_2">
+<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-23_2" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-23_2</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3"></audio></td>
   <td class="trad-col">Si c&amp;#39;est le matin, où est le jàba ?</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -622,11 +627,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24">
+<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3"></audio></td>
   <td class="trad-col">Je veux des oignons et des tomates.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -637,11 +642,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_2">
+<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_2" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24_2</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3"></audio></td>
   <td class="trad-col">áni cé wò, ala longgo día, ala bì día !</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -652,11 +657,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_3">
+<tr class="" data-id="dioula-to-french|person7|AUDIO-2026-04-20-17-43-24_3" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24_3</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3"></audio></td>
   <td class="trad-col">Je vais au magasin et j'achète des tomates et des poivrons frais.</td>
-  <td><audio controls preload="none" src="results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/dioula-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -672,11 +677,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person1</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-09">
+<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-09" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-09</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-09.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-09.mp3"></audio></td>
   <td class="trad-col">Ô et matin, où es-tu ? pour la journée ?</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-09_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-09_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -687,11 +692,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-32">
+<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-32" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-32</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-32.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-32.mp3"></audio></td>
   <td class="trad-col">Tu avais ses six poissons dans le grand jeu de l'acceptation.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-32_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-32_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -702,11 +707,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-58">
+<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-16-58" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-16-58</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-16-58.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-16-58.mp3"></audio></td>
   <td class="trad-col">Je vais trouver une forme de déni, mon homme et ma prise ne sont pas là, tu sais ?</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-58_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person1/AUDIO-2026-04-20-10-16-58_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -717,11 +722,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-17-22">
+<tr class="" data-id="bambara-to-french|person1|AUDIO-2026-04-20-10-17-22" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-10-17-22</td>
-  <td><audio controls preload="none" src="sources/local/person1/AUDIO-2026-04-20-10-17-22.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person1/AUDIO-2026-04-20-10-17-22.mp3"></audio></td>
   <td class="trad-col">S&amp;#39;il ne vous fait pas de bruit, n'en souffrez-vous pas ?</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person1/AUDIO-2026-04-20-10-17-22_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person1/AUDIO-2026-04-20-10-17-22_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -736,11 +741,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person2</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-11-35">
+<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-11-35" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-11-35</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-11-35.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-11-35.mp3"></audio></td>
   <td class="trad-col">La journée est longue, mais pas impossible.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person2/AUDIO-2026-04-20-11-11-35_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person2/AUDIO-2026-04-20-11-11-35_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -751,11 +756,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-14-21">
+<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-14-21" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-14-21</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-14-21.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-14-21.mp3"></audio></td>
   <td class="trad-col">Aujourd'hui, le tere est sorti même,</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person2/AUDIO-2026-04-20-11-14-21_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person2/AUDIO-2026-04-20-11-14-21_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -766,11 +771,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-14-35">
+<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-14-35" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-14-35</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-14-35.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-14-35.mp3"></audio></td>
   <td class="trad-col">Dieu nous a permis d'accepter le poison du blé !</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person2/AUDIO-2026-04-20-11-14-35_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person2/AUDIO-2026-04-20-11-14-35_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -781,11 +786,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-15-14">
+<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-15-14" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-15-14</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-15-14.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-15-14.mp3"></audio></td>
   <td class="trad-col">L&amp;#39;homme est fait d'argile, et nous sommes tous faits d'argile.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person2/AUDIO-2026-04-20-11-15-14_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person2/AUDIO-2026-04-20-11-15-14_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -796,11 +801,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-15-31">
+<tr class="" data-id="bambara-to-french|person2|AUDIO-2026-04-20-11-15-31" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-15-31</td>
-  <td><audio controls preload="none" src="sources/local/person2/AUDIO-2026-04-20-11-15-31.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person2/AUDIO-2026-04-20-11-15-31.mp3"></audio></td>
   <td class="trad-col">Si Dieu vous accepte, vous pouvez venir à la maison, si Dieu vous accepte, venez à l'ɲími sà.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person2/AUDIO-2026-04-20-11-15-31_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person2/AUDIO-2026-04-20-11-15-31_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -815,11 +820,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person3</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person3|AUDIO-2026-04-20-11-30-29">
+<tr class="" data-id="bambara-to-french|person3|AUDIO-2026-04-20-11-30-29" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-11-30-29</td>
-  <td><audio controls preload="none" src="sources/local/person3/AUDIO-2026-04-20-11-30-29.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person3/AUDIO-2026-04-20-11-30-29.mp3"></audio></td>
   <td class="trad-col">Bonjour, bonjour, je suis entré dedans !</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person3/AUDIO-2026-04-20-11-30-29_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person3/AUDIO-2026-04-20-11-30-29_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -834,11 +839,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person4</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part000">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part000.mp3"></audio></td>
   <td class="trad-col">J&amp;#39;aurai mon soleil, sa famille, la morsure de Dieu, la voix même de Dieu, je me fiche des tomates et pas des pommes, tu es dans le sang, le kilo leur morsure n'est pas sucrée, pas sucrée si c&amp;#39;est de la gelée, on peut l'acheter sucré, je peux l'acheter en kilos, je ne sais pas aujourd'hui !</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -849,11 +854,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part001">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part001.mp3"></audio></td>
   <td class="trad-col">Tu peux seulement en retirer des gens, tu peux en réduire certains à mort, tu perdras cinq kilos, même le monde ne connaît pas le bois, même le monde ne connaît pas le bois, même le monde ne sait pas que le bois sait, même le bois ne sait pas, même le bois ne sait pas, même le bois ne sait pas, même le bois ne sait pas, même le bois ne sait pas, même le bois ne sait pas, même le bois sait, même le bois sait</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -864,11 +869,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part002">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-41-11_part002" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-41-11_part002</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-41-11_part002.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-41-11_part002.mp3"></audio></td>
   <td class="trad-col">Je suis ce ce.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part002_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-41-11_part002_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -879,11 +884,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part000">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part000.mp3"></audio></td>
   <td class="trad-col">Oui ! Le terefilanin, aa ! Nous avons notre carte : nous sommes tourmentés, l'électricité est coupée le matin, elle est coupée le soir, le temps est gâché, nous vivons dans l'obscurité, tout est gâché, notre nourriture est gâchée, tout est gâché.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -894,11 +899,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part001">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part001.mp3"></audio></td>
   <td class="trad-col">Le père n'a pas essayé, le problème qui est d'essayer, verbalement cela sera ruiné, la maison ne nous le dit pas non plus, ils ne nous le disent pas, ils ne nous disent pas que, sans cela, le pouvoir sera coupé, la vérité.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -909,11 +914,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part002">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-49-40_part002" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-49-40_part002</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-49-40_part002.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-49-40_part002.mp3"></audio></td>
   <td class="trad-col">Les autorités ont eu pitié de nous, et cela a facilité les choses. Nous avons tous la paix. Que les preuves puissent leur faire ? Nous avons tous la paix, que Dieu nous vienne en aide.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part002_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-49-40_part002_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -924,11 +929,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-51-08_part000">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-51-08_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-51-08_part000</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-51-08_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-51-08_part000.mp3"></audio></td>
   <td class="trad-col">Il existe un proverbe en langue bambara selon lequel certains enfants vendent de l'eau sur la plage. Ce proverbe a une signification profonde.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-51-08_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-51-08_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -939,11 +944,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-51-08_part001">
+<tr class="" data-id="bambara-to-french|person4|AUDIO-2026-04-20-14-51-08_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-14-51-08_part001</td>
-  <td><audio controls preload="none" src="sources/local/person4/AUDIO-2026-04-20-14-51-08_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person4/AUDIO-2026-04-20-14-51-08_part001.mp3"></audio></td>
   <td class="trad-col">Ils te combattent, ils ne peuvent pas t'atteindre, Paris, tu es le fils de certains, tu tiens certaines choses de ton père, d'autres de ta mère, tu as ouvert ma bouche pour y mettre l'enfant, il ne peut pas t'atteindre.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person4/AUDIO-2026-04-20-14-51-08_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person4/AUDIO-2026-04-20-14-51-08_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -958,11 +963,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person5</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-02-56">
+<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-02-56" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-02-56</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-02-56.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-02-56.mp3"></audio></td>
   <td class="trad-col">Bonjour, les petits sont là, votre femme est là, votre père est là.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person5/AUDIO-2026-04-20-15-02-56_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person5/AUDIO-2026-04-20-15-02-56_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -973,11 +978,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-03-40">
+<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-03-40" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-03-40</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-03-40.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-03-40.mp3"></audio></td>
   <td class="trad-col">La grand-mère dit : « Je lui demanderai si le mari de ton père est là, et il dira : Ne regarde pas si le mari de ton père est là ; s'il ne dort pas, la femme viendra et se mariera. »</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person5/AUDIO-2026-04-20-15-03-40_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person5/AUDIO-2026-04-20-15-03-40_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -988,11 +993,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-07-50">
+<tr class="" data-id="bambara-to-french|person5|AUDIO-2026-04-20-15-07-50" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-07-50</td>
-  <td><audio controls preload="none" src="sources/local/person5/AUDIO-2026-04-20-15-07-50.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person5/AUDIO-2026-04-20-15-07-50.mp3"></audio></td>
   <td class="trad-col">alo awa, quand il est venu, il est venu de la grande maison, quand il est venu, tu as dit aux gens, unhun, je veux dire ça, d'acheter une robe, quand il est venu dire à qui allait acheter la robe, il l'a mise chez lui.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person5/AUDIO-2026-04-20-15-07-50_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person5/AUDIO-2026-04-20-15-07-50_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1007,11 +1012,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person6</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-07_part000">
+<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-07_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-07_part000</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-07_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-07_part000.mp3"></audio></td>
   <td class="trad-col">S&amp;#39;il vous plaît, c&amp;#39;est de la famille, c&amp;#39;est votre corps, aa, aujourd'hui, il vaut mieux le faire, je veux essayer de faire quelque chose, ou même le faire, lui a-t-il demandé, nous voulons voir, s'il peut,</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-07_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-07_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1022,11 +1027,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-07_part001">
+<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-07_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-07_part001</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-07_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-07_part001.mp3"></audio></td>
   <td class="trad-col">Quant à la fille, il restera sur place et viendra vers moi.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-07_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-07_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1037,11 +1042,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-36">
+<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-09-36" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-09-36</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-09-36.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-09-36.mp3"></audio></td>
   <td class="trad-col">Isa, Isa, tu n'as pas vu Ali aujourd'hui, mon village est derrière la maison pour acheter du pain, je n'ai pas attendu, il ne venait pas, je vais faire le tour de la route, te dis-tu entre deux virgules.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-36_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-09-36_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1052,11 +1057,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-10-18_part000">
+<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-10-18_part000" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-10-18_part000</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part000.mp3"></audio></td>
   <td class="trad-col">Demain matin, je vais à Pilate, hafizu, on n'a rien fait, rapprochayons-nous, je veux prendre un taxi ici, voilà quelque chose, prends mes gars, peut-être demain et voilà, fais-le, prends-le mon gars, je vais prendre un taxi et partir.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part000_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1067,11 +1072,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-10-18_part001">
+<tr class="" data-id="bambara-to-french|person6|AUDIO-2026-04-20-15-10-18_part001" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-15-10-18_part001</td>
-  <td><audio controls preload="none" src="sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person6/AUDIO-2026-04-20-15-10-18_part001.mp3"></audio></td>
   <td class="trad-col">Je serai lent, je me lèverai et j'irai six fois voir Pilate.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person6/AUDIO-2026-04-20-15-10-18_part001_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1086,11 +1091,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person7</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-23">
+<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-23" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-23</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23.mp3"></audio></td>
   <td class="trad-col">áhá, nous connaissons le son de l'épée ákɛ̀nɛ ?</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1101,11 +1106,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-23_2">
+<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-23_2" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-23_2</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-23_2.mp3"></audio></td>
   <td class="trad-col">í et matin nê bá, jàba est cinq heures ?</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-23_2_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1116,11 +1121,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24">
+<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24.mp3"></audio></td>
   <td class="trad-col">Le côté jabaculu est de la corde, j'aime le jabaculu et les tomates.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1131,11 +1136,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24_2">
+<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24_2" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24_2</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_2.mp3"></audio></td>
   <td class="trad-col">et toi, Dieu amour, Dieu aujourd'hui !</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_2_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1146,11 +1151,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24_3">
+<tr class="" data-id="bambara-to-french|person7|AUDIO-2026-04-20-17-43-24_3" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-17-43-24_3</td>
-  <td><audio controls preload="none" src="sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/local/person7/AUDIO-2026-04-20-17-43-24_3.mp3"></audio></td>
   <td class="trad-col">Je vais à la pisciculture, je vais acheter un gros poisson, des tomates et des carottes fraîches.</td>
-  <td><audio controls preload="none" src="results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/bambara-to-french/person7/AUDIO-2026-04-20-17-43-24_3_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1166,11 +1171,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person1</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-14-41">
+<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-14-41" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-14-41</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-14-41.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-14-41.mp3"></audio></td>
   <td class="trad-col"> N be tagamana ka taga soo.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person1/AUDIO-2026-04-20-16-14-41_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person1/AUDIO-2026-04-20-16-14-41_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1181,11 +1186,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-14-57">
+<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-14-57" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-14-57</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-14-57.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-14-57.mp3"></audio></td>
   <td class="trad-col"> I bena mun lo kɛ n’i ka tiketiw b’a yira ko n’ tɔgɔ tɛ a ye?</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person1/AUDIO-2026-04-20-16-14-57_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person1/AUDIO-2026-04-20-16-14-57_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1196,11 +1201,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-07">
+<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-07" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-07</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-07.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-07.mp3"></audio></td>
   <td class="trad-col"> Ayiwa o tuma na, i be koow ye ten, n’ be Visif ka kɔnti dɔ ɲɛminɛ ten.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-07_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-07_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1211,11 +1216,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-26">
+<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-26" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-26</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-26.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-26.mp3"></audio></td>
   <td class="trad-col"> N’ yɛrɛ fɛ, o baara kɛcogo man di n’ ye. Ani, minw jalakilen lo, an bena a filɛ min bena kɛ. An bena kuma o koo la tugun sini.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-26_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-26_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1226,11 +1231,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-39">
+<tr class="" data-id="french-to-dioula|person1|AUDIO-2026-04-20-16-15-39" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-39</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-39.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-39.mp3"></audio></td>
   <td class="trad-col"> N’ b’a lɔn ko n’ tɛ la a la ko n’ kɔrɔla.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-39_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person1/AUDIO-2026-04-20-16-15-39_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1245,11 +1250,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person2</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-28-48">
+<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-28-48" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-28-48</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3"></audio></td>
   <td class="trad-col"> Bonjour, n tun ka kan ka dɔw filɛ faransɛkan na, n ɲinɛna, o kɔfɛ n y’a fɔn, o kɔfɛ ɲuman, n ɲinɛna o kɔ tugun. N’ bena dɔw filɛ kɔfɛ.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person2/AUDIO-2026-04-21-10-28-48_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-28-48_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1260,11 +1265,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-33-48">
+<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-33-48" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-33-48</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3"></audio></td>
   <td class="trad-col"> Yala kunnafoni dɔw b’i fɛ k’u jɛnsɛn ɛntɛrɛnɛti kan wa? I b’a fɛ ka kunnafoni minw fɔ jama ye?</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person2/AUDIO-2026-04-21-10-33-48_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-33-48_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1275,11 +1280,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-34-03">
+<tr class="" data-id="french-to-dioula|person2|AUDIO-2026-04-21-10-34-03" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-34-03</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3"></audio></td>
   <td class="trad-col"> Tuma bɛɛ, i ka baara kɛ ni sɛgɛsɛgɛrikɛlan ye n’i be navigatɛri kɛra. Aw ni ce aw ka bonya la kosɔbɛ.</td>
-  <td><audio controls preload="none" src="results/french-to-dioula/person2/AUDIO-2026-04-21-10-34-03_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-dioula/person2/AUDIO-2026-04-21-10-34-03_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1295,11 +1300,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person1</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-14-41">
+<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-14-41" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-14-41</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-14-41.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-14-41.mp3"></audio></td>
   <td class="trad-col"> N bɛ taama ka taa so.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person1/AUDIO-2026-04-20-16-14-41_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person1/AUDIO-2026-04-20-16-14-41_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1310,11 +1315,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-14-57">
+<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-14-57" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-14-57</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-14-57.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-14-57.mp3"></audio></td>
   <td class="trad-col"> I bɛna mun kɛ ni i ka tikitiw y’a jira ko ne tɛ a tɔgɔ ye?</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person1/AUDIO-2026-04-20-16-14-57_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person1/AUDIO-2026-04-20-16-14-57_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1325,11 +1330,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-07">
+<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-07" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-07</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-07.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-07.mp3"></audio></td>
   <td class="trad-col"> Bon o tuma, i bɛ fɛnw ye o cogo de la, n bɛ Visif jatebɔsɛbɛn dɔ boli o cogo de la.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-07_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-07_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1340,11 +1345,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-26">
+<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-26" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-26</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-26.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-26.mp3"></audio></td>
   <td class="trad-col"> Ne yɛrɛ fɛ, nin baara kɛcogo in man di ne ye. Wa, minnu bɛ jalaki, an bɛna a lajɛ min bɛ kɛ. An bɛna kuma o kan tugun sini.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-26_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-26_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1355,11 +1360,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-39">
+<tr class="" data-id="french-to-bambara|person1|AUDIO-2026-04-20-16-15-39" tabindex="0">
   <td class="name-col">AUDIO-2026-04-20-16-15-39</td>
-  <td><audio controls preload="none" src="sources/french/person1/AUDIO-2026-04-20-16-15-39.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person1/AUDIO-2026-04-20-16-15-39.mp3"></audio></td>
   <td class="trad-col"> Ne b’a dɔn ko ne dalen tɛ a la ko ne kɔrɔla.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-39_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person1/AUDIO-2026-04-20-16-15-39_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1374,11 +1379,11 @@
 <h3 style="margin-top:16px;color:#555;font-size:15px">person2</h3>
 <table>
 <tr><th>Fichier</th><th>Source</th><th>Traduction</th><th>Audio trad.</th><th>Évaluation</th></tr>
-<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-28-48">
+<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-28-48" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-28-48</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-28-48.mp3"></audio></td>
   <td class="trad-col"> Bonjour, n tun ka kan ka dɔw lajɛ faransikan na, n ɲinɛna, o kɔ n ye a to yen, o kɔfɛ bon, n ɲinɛna a kɔ tugun. N bɛna dɔw lajɛ kɔfɛ.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person2/AUDIO-2026-04-21-10-28-48_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-28-48_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1389,11 +1394,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-33-48">
+<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-33-48" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-33-48</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-33-48.mp3"></audio></td>
   <td class="trad-col"> Yala kunnafoni dɔw b’aw bolo ka tila ɛntɛrinɛti kan wa? Kunnafoni minnu b’a fɛ ka fɔ jama ye wa?</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person2/AUDIO-2026-04-21-10-33-48_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-33-48_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1404,11 +1409,11 @@
     <textarea class="comment" placeholder="commentaire (optionnel)"></textarea>
   </td>
 </tr>
-<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-34-03">
+<tr class="" data-id="french-to-bambara|person2|AUDIO-2026-04-21-10-34-03" tabindex="0">
   <td class="name-col">AUDIO-2026-04-21-10-34-03</td>
-  <td><audio controls preload="none" src="sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/sources/french/person2/AUDIO-2026-04-21-10-34-03.mp3"></audio></td>
   <td class="trad-col"> Baara kɛ ni tracking protection ye tuma bɛɛ n’i bɛ ka navigatɛri kɛ. Aw ni ce aw ka bonya la kosɛbɛ.</td>
-  <td><audio controls preload="none" src="results/french-to-bambara/person2/AUDIO-2026-04-21-10-34-03_translated.mp3"></audio></td>
+  <td><audio controls preload="none" src="https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/french-to-bambara/person2/AUDIO-2026-04-21-10-34-03_translated.mp3"></audio></td>
   <td class="actions-col">
     <div class="btn-group">
       <button class="btn exact " data-tag="exact">✅</button>
@@ -1422,46 +1427,73 @@
 </table>
 
 
-<div class="export-bar" onclick="exportEvaluations()">💾 Exporter evaluations.json</div>
+<div class="toast" id="toast"></div>
 
 </main>
 
 <script>
 const STORAGE_KEY = 'lam_evaluations_v1';
+const REMOTE_EVAL_URL = 'https://github.com/teaching-formation/cahier-recette-lam-s2s/raw/main/results/evaluations.json';
 
-// Charger les évaluations existantes depuis le HTML (persistées côté serveur) et fusionner avec localStorage
 function getEvals() {
-  const fromStorage = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  return fromStorage;
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 }
-
 function saveEvals(evals) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(evals));
   updateStats();
 }
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--red)' : 'var(--green)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 
-// Initialiser depuis le HTML (évaluations déjà chargées côté serveur)
-document.addEventListener('DOMContentLoaded', () => {
-  // Fusion initiale : ce qui est dans le HTML écrase le localStorage (au cas où le fichier a été mis à jour hors UI)
-  const fromStorage = getEvals();
+function applyEvalsToUI(evals) {
   document.querySelectorAll('tr[data-id]').forEach(tr => {
     const id = tr.dataset.id;
-    const activeBtn = tr.querySelector('.btn.active');
+    const entry = evals[id] || {};
+    const tag = entry.tag || '';
+    const comment = entry.comment || '';
+
+    tr.querySelectorAll('.btn').forEach(b => {
+      if (b.dataset.tag === tag && tag !== '') b.classList.add('active');
+      else b.classList.remove('active');
+    });
+
+    tr.classList.remove('evaluated', 'exact', 'fautes', 'hallu');
+    if (tag) tr.classList.add('evaluated', tag);
+
     const commentEl = tr.querySelector('.comment');
-    if (activeBtn && activeBtn.dataset.tag) {
-      fromStorage[id] = fromStorage[id] || {};
-      fromStorage[id].tag = activeBtn.dataset.tag;
-    }
-    if (commentEl && commentEl.value) {
-      fromStorage[id] = fromStorage[id] || {};
-      fromStorage[id].comment = commentEl.value;
-    }
+    if (commentEl) commentEl.value = comment;
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(fromStorage));
   updateStats();
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  updateStats();
+
+  try {
+    const response = await fetch(REMOTE_EVAL_URL + '?t=' + Date.now());
+    if (response.ok) {
+      const remoteEvals = await response.json();
+      const localEvals = getEvals();
+      const merged = Object.assign({}, remoteEvals, localEvals);
+      saveEvals(merged);
+      applyEvalsToUI(merged);
+
+      const remoteCount = Object.keys(remoteEvals).length;
+      const localCount = Object.keys(localEvals).length;
+      if (remoteCount > 0 || localCount > 0) {
+        showToast(`✓ ${remoteCount} distantes + ${localCount} locales chargées`);
+      }
+    }
+  } catch (e) {
+    console.log('Pas de evaluations.json distant, utilisation locale uniquement');
+  }
 });
 
-// Gestion des clics sur les boutons
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.btn');
   if (!btn) return;
@@ -1472,29 +1504,26 @@ document.addEventListener('click', (e) => {
   const tag = btn.dataset.tag;
   const evals = getEvals();
 
-  // Mettre à jour UI : désactiver tous les boutons sauf celui cliqué
   tr.querySelectorAll('.btn').forEach(b => {
-    if (b.dataset.tag === tag && tag !== '') {
-      b.classList.add('active');
-    } else {
-      b.classList.remove('active');
-    }
+    if (b.dataset.tag === tag && tag !== '') b.classList.add('active');
+    else b.classList.remove('active');
   });
 
-  // Mettre à jour la couleur de la ligne
   tr.classList.remove('evaluated', 'exact', 'fautes', 'hallu');
   if (tag) {
     tr.classList.add('evaluated', tag);
     evals[id] = evals[id] || {};
     evals[id].tag = tag;
   } else {
-    if (evals[id]) delete evals[id].tag;
+    if (evals[id]) {
+      delete evals[id].tag;
+      if (!evals[id].comment) delete evals[id];
+    }
   }
 
   saveEvals(evals);
 });
 
-// Sauvegarde des commentaires à la saisie
 document.addEventListener('input', (e) => {
   if (!e.target.classList.contains('comment')) return;
   const tr = e.target.closest('tr[data-id]');
@@ -1503,17 +1532,12 @@ document.addEventListener('input', (e) => {
   const evals = getEvals();
   evals[id] = evals[id] || {};
   evals[id].comment = e.target.value;
-  if (!evals[id].comment && !evals[id].tag) {
-    delete evals[id];
-  }
+  if (!evals[id].comment && !evals[id].tag) delete evals[id];
   saveEvals(evals);
 });
 
-// Raccourcis clavier : 1/2/3/0 quand le focus est dans un textarea d'une ligne
 document.addEventListener('keydown', (e) => {
-  // Ignore si on est dans le textarea (on veut taper)
   if (e.target.tagName === 'TEXTAREA') return;
-
   const tr = document.activeElement?.closest?.('tr[data-id]');
   if (!tr) return;
 
@@ -1525,7 +1549,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Mise à jour des stats
 function updateStats() {
   const evals = getEvals();
   let exact = 0, fautes = 0, hallu = 0;
@@ -1544,7 +1567,6 @@ function updateStats() {
   document.getElementById('count-pending').textContent = pending;
 }
 
-// Export du JSON
 function exportEvaluations() {
   const evals = getEvals();
   const blob = new Blob([JSON.stringify(evals, null, 2)], {type: 'application/json'});
@@ -1554,8 +1576,27 @@ function exportEvaluations() {
   a.download = 'evaluations.json';
   a.click();
   URL.revokeObjectURL(url);
+  showToast('✓ evaluations.json téléchargé — place-le dans results/ puis lance ./run.sh');
+}
 
-  alert('✅ evaluations.json téléchargé\n\nPlace-le dans results/ puis relance ./run.sh pour que tes évaluations apparaissent dans le summary.md et le DOCX.');
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      const current = getEvals();
+      const merged = Object.assign({}, current, imported);
+      saveEvals(merged);
+      applyEvalsToUI(merged);
+      showToast(`✓ ${Object.keys(imported).length} évaluation(s) importée(s)`);
+    } catch (err) {
+      showToast('❌ Fichier JSON invalide', true);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 </script>
 

@@ -3,7 +3,7 @@
 **Prestataire** : LAfricaMobile
 **Client** : ANSUT / DTDI
 **Tests bidirectionnels** : dioula ↔ français · bambara ↔ français
-**Généré le** : 2026-04-21 à 20:20:45
+**Généré le** : 2026-04-21 à 20:30:28
 
 ---
 
